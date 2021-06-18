@@ -1,0 +1,8 @@
+snap_graph_ifg: {class: File, path: ./read-split-ifg.xml }
+snap_graph_merge: {class: File, path: ./topsar-merge-write.xml}
+primary: {'class': 'Directory', 'path': '/home/fbrito/Downloads/ifg/S1B_IW_SLC__1SDV_20210528T050419_20210528T050446_027100_033CC1_D1F1.SAFE' }
+secondary: {'class': 'Directory', 'path': '/home/fbrito/Downloads/ifg/S1A_IW_SLC__1SDV_20210510T050500_20210510T050527_037821_0476C8_9B39.SAFE' }
+subswath:
+- IW1
+- IW2
+- IW3

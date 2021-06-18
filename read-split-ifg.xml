@@ -1,0 +1,126 @@
+<graph id="Graph">
+  <version>1.0</version>
+  <node id="Read_P">
+    <operator>Read</operator>
+    <sources/>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <file>${inFileP}</file>
+    </parameters>
+  </node>
+    <node id="Apply-Orbit-File_P">
+    <operator>Apply-Orbit-File</operator>
+    <sources>
+      <sourceProduct refid="Read_P"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <orbitType>Sentinel Precise (Auto Download)</orbitType>
+      <polyDegree>3</polyDegree>
+      <continueOnFail>true</continueOnFail>
+    </parameters>
+  </node>
+  <node id="TOPSAR-Split_P">
+    <operator>TOPSAR-Split</operator>
+    <sources>
+      <sourceProduct refid="Apply-Orbit-File_P"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subswath>${subSwath}</subswath>
+      <selectedPolarisations>VV</selectedPolarisations>
+      <firstBurstIndex>1</firstBurstIndex>
+      <lastBurstIndex>9999</lastBurstIndex>
+      <wktAoi/>
+    </parameters>
+  </node>
+  <node id="Read_S">
+    <operator>Read</operator>
+    <sources/>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <file>${inFileS}</file>
+    </parameters>
+  </node>
+    <node id="Apply-Orbit-File_S">
+    <operator>Apply-Orbit-File</operator>
+    <sources>
+      <sourceProduct refid="Read_S"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <orbitType>Sentinel Precise (Auto Download)</orbitType>
+      <polyDegree>3</polyDegree>
+      <continueOnFail>true</continueOnFail>
+    </parameters>
+  </node>
+  <node id="TOPSAR-Split_S">
+    <operator>TOPSAR-Split</operator>
+    <sources>
+      <sourceProduct refid="Apply-Orbit-File_S"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subswath>${subSwath}</subswath>
+      <selectedPolarisations>VV</selectedPolarisations>
+      <firstBurstIndex>1</firstBurstIndex>
+      <lastBurstIndex>9999</lastBurstIndex>
+      <wktAoi/>
+    </parameters>
+  </node>
+<node id="Back-Geocoding">
+    <operator>Back-Geocoding</operator>
+    <sources>
+      <sourceProduct refid="TOPSAR-Split_P"/>
+      <sourceProduct.1 refid="TOPSAR-Split_S"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <demName>SRTM 3Sec</demName>
+      <demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>
+      <externalDEMFile/>
+      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <resamplingType>BILINEAR_INTERPOLATION</resamplingType>
+      <maskOutAreaWithoutElevation>true</maskOutAreaWithoutElevation>
+      <outputRangeAzimuthOffset>false</outputRangeAzimuthOffset>
+      <outputDerampDemodPhase>false</outputDerampDemodPhase>
+      <disableReramp>false</disableReramp>
+    </parameters>
+  </node>
+  <node id="Interferogram">
+    <operator>Interferogram</operator>
+    <sources>
+      <sourceProduct refid="Back-Geocoding"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subtractFlatEarthPhase>true</subtractFlatEarthPhase>
+      <srpPolynomialDegree>5</srpPolynomialDegree>
+      <srpNumberPoints>501</srpNumberPoints>
+      <orbitDegree>3</orbitDegree>
+      <includeCoherence>true</includeCoherence>
+      <cohWinAz>2</cohWinAz>
+      <cohWinRg>10</cohWinRg>
+      <squarePixel>true</squarePixel>
+      <subtractTopographicPhase>false</subtractTopographicPhase>
+      <demName/>
+      <externalDEMFile/>
+      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <externalDEMApplyEGM/>
+      <tileExtensionPercent/>
+      <outputElevation>false</outputElevation>
+      <outputLatLon>false</outputLatLon>
+    </parameters>
+  </node>
+  <node id="TOPSAR-Deburst">
+    <operator>TOPSAR-Deburst</operator>
+    <sources>
+      <sourceProduct refid="Interferogram"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <selectedPolarisations/>
+    </parameters>
+  </node>
+  <node id="Write">
+    <operator>Write</operator>
+    <sources>
+      <sourceProduct refid="TOPSAR-Deburst"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <file>${outFile}</file>
+      <formatName>BEAM-DIMAP</formatName>
+    </parameters>
+  </node>
+  </graph>
