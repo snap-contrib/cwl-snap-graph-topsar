@@ -42,7 +42,7 @@ docker build -t snap:latest -f .docker/Dockerfile .
 Check the docker image exists with:
 
 ```console
-docker images | grep snap:latest
+docker images | grep snap
 ```
 
 This returns one line with the docker image just built.
