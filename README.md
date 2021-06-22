@@ -82,6 +82,7 @@ There are two graphs:
 - the first, `read-split-ifg.xml` processes a pair of SLC for a given subswath. The CWL documents will run three instances, one for each subswath
 - the second, `topsar-merge-write.xml`, merges the three interferograms
 
+The CWL file contains a two step workflow that orchestrates the execution of the two SNAP graphs above. 
 
 The CWL file will instruct `gpt` to use the value passed as a command line argument, e.g.:
 
