@@ -205,7 +205,16 @@ $graph:
   id: main
   inputs:
     subswath:
-      type: string[]
+      type:
+        type: enum
+        symbols: 
+        - "IW1"
+        - "IW2"
+        - "IW3"
+        - "IW1,IW2"
+        - "IW2,IW3"
+        - "IW1,IW2,IW3"
+
     primary:
       doc: Sentinel-1 SLC primary product SAFE Directory
       label: Sentinel-1 SLC primary product SAFE Directory
@@ -228,6 +237,35 @@ $graph:
   - class: InlineJavascriptRequirement
 
   steps:
+    generate_swath:
+      requirements:
+        - class: InlineJavascriptRequirement
+      run:
+        class: ExpressionTool
+        inputs:
+          subswath:
+            type:
+              type: enum
+              symbols: 
+              - "IW1"
+              - "IW2"
+              - "IW3"
+              - "IW1,IW2"
+              - "IW2,IW3"
+              - "IW1,IW2,IW3"
+        outputs:
+          swaths:
+            type: string[]
+        expression: |
+          ${
+            
+            return { "swaths": inputs.subswath.split(",") } 
+          }
+      in:
+        subswath: subswath
+      out:
+        - swaths
+
     node_01:
       in: 
         input_reference: primary
@@ -246,7 +284,7 @@ $graph:
         inp2: secondary
         inp3: node_01/results
         inp4: node_02/results
-        inp5: subswath
+        inp5: generate_swath/swaths
       out:
       - results
       run: '#ifg'
