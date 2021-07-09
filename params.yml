@@ -1,0 +1,3 @@
+primary: {'class': 'Directory', 'path': '/home/fbrito/work/stac2safe/data/o2ww9w52' }
+secondary: {'class': 'Directory', 'path': '/home/fbrito/work/stac2safe/data/w8u043cn' }
+subswath: "IW1,IW2,IW3"
