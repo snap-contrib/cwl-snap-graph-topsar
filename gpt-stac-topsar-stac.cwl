@@ -5,6 +5,7 @@ $graph:
     DockerRequirement:
       dockerPull: docker.terradue.com/stac2safe:latest
   id: stac2safe
+  stdout: message
   arguments:
     - -p 
     - sar:product_type=SLC
@@ -17,10 +18,12 @@ $graph:
         prefix: --input_reference
       type: Directory
   outputs:
-    results:
+    results: 
+      type: string
       outputBinding:
-        glob: .
-      type: Directory
+        glob: message
+        loadContents: true
+        outputEval: $(self[0].contents.split('\n')[0])
   requirements:
     EnvVarRequirement:
       envDef:
@@ -85,16 +88,20 @@ $graph:
         position: 1
         prefix: -PinFileP=
         separate: false
-        valueFrom: ${ return inputs.inp1.path + '/manifest.safe'; }
+        valueFrom: ${ return inputs.inp1.path + inputs.inp3 + '/manifest.safe'; }
       type: Directory
     inp2:
       inputBinding:
         position: 2
         prefix: -PinFileS=
         separate: false
-        valueFrom: ${ return inputs.inp2.path + '/manifest.safe'; }
+        valueFrom: ${ return inputs.inp2.path + inputs.inp4 + '/manifest.safe'; }
       type: Directory
     inp3:
+      type: string
+    inp4:
+      type: string
+    inp5:
       inputBinding:
         position: 3
         prefix: -PsubSwath=
@@ -235,14 +242,16 @@ $graph:
       run: '#stac2safe'
     node_1:
       in:
-        inp1: node_01/results
-        inp2: node_02/results
-        inp3: 
+        inp1: primary
+        inp2: secondary
+        inp3: node_01/results
+        inp4: node_02/results
+        inp5:
           default: ["IW1"]# , "IW2", "IW3"]
       out:
       - results
       run: '#ifg'
-      scatter: inp3
+      scatter: inp5
       scatterMethod: dotproduct
     node_2:
       in: 
