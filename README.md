@@ -1,6 +1,7 @@
 # Process SNAP GPT TopSAR graph using docker and the Common Workflow Language (CWL)
 
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
 
 This repo provides a method to process Earth Observation data with the SNAP Graph Processing Tool (GPT) using docker and CWL.
 
@@ -42,7 +43,7 @@ docker build -t snap:latest -f .docker/Dockerfile .
 Check the docker image exists with:
 
 ```console
-docker images | grep snap:latest
+docker images | grep snap
 ```
 
 This returns one line with the docker image just built.
@@ -82,6 +83,7 @@ There are two graphs:
 - the first, `read-split-ifg.xml` processes a pair of SLC for a given subswath. The CWL documents will run three instances, one for each subswath
 - the second, `topsar-merge-write.xml`, merges the three interferograms
 
+The CWL file contains a two step workflow that orchestrates the execution of the two SNAP graphs above. 
 
 The CWL file will instruct `gpt` to use the value passed as a command line argument, e.g.:
 
