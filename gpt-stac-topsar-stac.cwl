@@ -204,8 +204,8 @@ $graph:
   doc: SNAP SAR Calibration
   id: main
   inputs:
-    #subswath:
-    #  type: string[]
+    subswath:
+      type: string[]
     primary:
       doc: Sentinel-1 SLC primary product SAFE Directory
       label: Sentinel-1 SLC primary product SAFE Directory
@@ -246,8 +246,7 @@ $graph:
         inp2: secondary
         inp3: node_01/results
         inp4: node_02/results
-        inp5:
-          default: ["IW1"]# , "IW2", "IW3"]
+        inp5: subswath
       out:
       - results
       run: '#ifg'
