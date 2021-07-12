@@ -60,12 +60,10 @@ $graph:
   requirements:
     EnvVarRequirement:
       envDef:
-        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/conda/envs/env_dim2stac/bin
-        JAVA_HOME: /srv/conda/envs/env_snap/snap/jre
-        HOME: /tmp
-        SNAP_HOME: /tmp/.snap
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/conda/envs/env_dim2stac/bin:/srv/conda/envs/env_dim2stac/snap/bin
     ResourceRequirement: {}
-
+  stderr: std.err
+  stdout: std.out
 
 - baseCommand: gpt
   hints:
